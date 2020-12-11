@@ -1,0 +1,28 @@
+{
+  "name": "ts",
+  "version": "1.0.0",
+  "description": "ts的笔记",
+  "main": "index.js",
+  "dependencies": {
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch src --exec ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1029243083/TypeScript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1029243083/TypeScript/issues"
+  },
+  "homepage": "https://github.com/1029243083/TypeScript#readme"
+}
