@@ -6,6 +6,7 @@
             "es2016"
         ], //当前的环境,可以添加多个环境，默认有dom，但是这里面没有node环境
         "outDir": "./dist", //编译之后的文件放在哪，默认是跟源文件在一起
+        "strictNullChecks":true
     },
     "include": [
         "./src"

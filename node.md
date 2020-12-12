@@ -37,3 +37,147 @@
  ts-node: 将ts代码在内存中完成编译，同时完成运行，不会生成文件 命令行 ts-node '要编译的文件路径'
  nodemon: 当文件发生变化，重新编译执行 默认监听所有文件 命令行 nodemon -watch src -e ts --exec ts-node '要编译的文件路径'
                                                                    要监听的文件夹 监听的文件后缀 执行的命令
+
+
+# 基本类型约束
+## 如果进行类型约束
+ - 可以约束那些值
+    1. 变量
+    2. 函数参数
+    3. 函数返回值
+ - 怎么约束
+ - 在变量 函数蚕食 函数返回值位置加上```:类型```
+ 例如```let name:string="szc"```
+ - ts为了减少代码的输入，非常智能的自动推导类型例如
+ ```js
+    function sun(a:number, b:number) {
+        return a + b
+    } //ts自动返回number类型的值
+
+    let res = sun(1, 3);// 由于函数返回的数字类型，res变量也自动是数字类型
+
+    let name = 'ssss';// 因为直接赋值一个字符串ts自动推导name是string类型
+ ```
+ - 当ts推导不出类型,在变量下面有3个点表示,类型是any 
+ - any表示任意类型，对该类型，ts不进行类型检查
+
+## 源代码核编译结果的差异
+编译结果中没有类型约束的代码，js只能执行js代码
+
+# 基本数据类型
+ 1. number 数字
+ 2. string 字符串
+ 3. 数组 数组必须要表面这是一个什么类型的数组
+    ```js
+    //方式1
+    let arr: number[] = [1,2,34,5];
+    //方式2
+    let arr: Array<number> = [1,2,34,5];
+    ```
+ 4. object 不能约束对象里面每个值的类型
+    ```js
+    function printValue(obj:object) {
+        const res = Object.values(obj);
+        res.forecah(e => consloe.log(e));
+    }
+    printValue({name:'ss',age:12});
+    ```
+ 5. null和undefined 是所有类型的字类型，他们可以赋值个其他类型例如:
+    ```js
+    let a:number = undefined; //在没有严格约束中这样是可以赋值的，但是不希望这样，又回到了js中的问题
+    //可以在配置文件中添加一个配置strictNullChecks:true,可以获得严格的类型检查 null和undefined只能赋值给自己
+    ```
+# 其他常用类型
+ 1. 联合类型
+    - 可以在多种类型中任选其一
+    - 配合类型保护
+    - 类型保护：当对某个变量进行类型判断之后，在判断语句中便可确定他的类型，typeof可以触发基本的类型保护
+    ```js
+    let a:number | undefined; //可以是数字类型，也可以是undefined
+    if(typeof a === 'string'){
+        //类型包含
+        a.substr(); //这里就有字符串的方法提示，在这里已经确定a是字符串类型
+    }
+    ```
+ 2. void类型： 通常用于约束函数的返回值，表示该函数没有返回值
+    ```js
+    function print():void{
+        console.log('sss');
+    }
+    ```
+ 3. never类型：通常约束函数的返回值，表示该函数永远不会结束
+    ```js
+    function Error(msg:string):never{
+        throw new Error(msg);
+    }
+
+    function test():never{
+        while(true){
+            //死循环
+        }
+    }
+    ```
+ 4. 字面量约束：非常强类型的约束
+    ```js
+    let a:'A'; //这个变量只能赋值为一个字符串的A
+    let a:2; //这个变量只能赋值为一个数组2
+    let arr:[]; //这个变量只能赋值为一个空数组
+    let obj:{ //这个变量只能赋值一个对象 对象里面必须有字符串的name和数字的age
+        name:string
+        age:number
+    }    
+    ```
+ 5. 元组类型(Tuple): 一个固定长度的数组，并且数组中的每一项的类型确定
+    ```js
+    let a:[string,number]; //这个数组的长度只能是2，第一项是字符串类型，第二项是数字类型
+    a = ['string',1];
+    ```
+ 6. any类型：any类型可以绕过类型检查，因此，any类型的数据可以赋值给任意类型
+    ```js
+    let a:any = 'sss';
+    let b:number = a; //不报错，但有隐患
+    ```
+# 类型别名：对已知的类型定义名称
+```js
+type User = {
+    name:string,
+    age:number,
+    sex:Sex
+}
+type Sex = '男' | '女';
+
+let u:User = {
+    name:'sss',
+    age:12,
+    sex:'女'
+}
+
+function getUser(s:Sex):User[] {
+    return []; //返回的是带user用户的数组，s传入的必须是男或女
+}
+```
+
+# 函数相关的约束 
+ 1. 函数重载： 在函数实现之前，对函数调用的多种情况进行声明
+ ```js
+ function test(a:string,b:string):string;
+ function test(a:number,b:number):number;
+ function test(a:string | number, b: string | number):string | number{ //这样函数的返回值就会明确返回值是什么类型
+     if(typeof a === 'string' && typeof b === 'string'){
+         return a + b;
+     }else if(typeof a === 'number' && typeof b === 'number'){
+         return a * b;
+     }
+     throw new Error('a和b必须是同一类型')
+ }
+ ```
+ 2. 可选参数: 在某些参数后面加上问号，表示该参数可以不用传递，可选选参数必须是在末尾
+ ```js
+ function test(a:number, b:number, c?:number){
+     if(c){
+         return a + b +c;
+     }
+     return a + b;
+ }
+ test(1,2,3); //默认情况下ts是要传递3个参数，但加了可选参数就不用了
+ ```
