@@ -181,3 +181,121 @@ function getUser(s:Sex):User[] {
  }
  test(1,2,3); //默认情况下ts是要传递3个参数，但加了可选参数就不用了
  ```
+
+ # 扩展类型-枚举
+ > 扩展类型： 类型别名，枚举，接口，类
+  - 字面量类型的问题
+    1. 在类型约束的地方，会产生重复代码，但是可以使用类型别名来解决
+    ```js
+    let gender: "男" | "女";
+    gender = '男';
+
+    //type Gender = "男" | "女";
+
+    function screachUser(g:"男" | "女"){ //重复的类型 可使用类型别名
+
+    }
+    ```
+ - 逻辑含义和真实的值产生了混淆，会导致当修改真实值的时候，产生大量的修改
+    ```js
+    type Gender = "男" | "女"; //当这里的值需要改的时候，下面的值也需要跟着修改，但逻辑含义没有变化都是表示男 | 女
+    let gender:Gender;
+    gender = '女';
+    gender = '男'
+    ```
+# 枚举
+   - 如何定义一个枚举
+   ```js
+   enum 枚举名{ //他把真实的值和逻辑名称分离了
+       枚举字段 = 值1,
+       枚举字段 = 值2,
+       ...
+   }
+
+   enum Gender { //当我要改值的时候，只有改这里就够了
+       male = '男',
+       female = '女'
+   }
+   let gender: Gender;
+   gender = Gender.male;
+   gender = Gender.female;
+   //这里就不能直接赋值'男' | '女' 要使用逻辑名称
+   ```
+ - 枚举会出现在编译结果中，编译结果表现为一个对象
+ - 枚举的规则
+    - 枚举的字段值可以是字符串或数字
+    - 数字枚举的值会自动自增
+    ```js
+    enum Level{ //当第一个名称有值，会根据第一个的值自动自增下去，
+                // 当第一个名称没有值，默认为0，会根据0自增下去
+        level1:1,
+        level2,
+        level3
+    }
+    let l:Level;
+    l = Level.level1;
+    l = Level.level2; //赋值为2
+    ```
+    - 被数字枚举约束的变量，可以直接赋值为数字
+    ```js
+    enum Level{
+        level1,
+        level2,
+        level3
+    }
+    let l:Level;
+    l = 1; //可以直接赋值数字，但是不要这样写
+    ```
+    - 数字枚举的编译结果 和字符串的编译枚举有差异，具体文字不好描述，编译文件直接看
+    - 最佳实践
+        - 尽量不要在一个枚举中即出现数字字段，又出现字符串字段
+        - 使用枚举是，尽量使用枚举字段的名称，而不使用真实的值
+        ```js
+        enum Level{
+            level1,
+            level2
+        }
+
+        function search(l:Level){
+
+        }
+        search(Level.level1)
+        ```
+# 枚举改造扑克牌练习在src目录下
+# 扩展只是；位枚举（枚举的位运算）
+ - 只针对数字枚举
+ 位运算：两个数字换算成二进制后进行运算
+```js
+enum Permission { //换算成二进制有1的地方代表有权限
+    Read = 1,  // =>  0001
+    Wirte = 2, // =>  0010
+    Create = 4, // => 0100
+    Delete = 8, // => 1000
+}
+
+// 1. 如何组合权限
+// 使用或运算 | 有一个是真则为真，全假为假
+// 0001
+// 0010
+// 0011
+let p:Permission = Permission.Read | Permission.Wirte;
+
+// 2. 如何判断是否拥有某个权限
+//使用且运算 & 全真才为真
+// 0011
+// 0010
+// 0010
+function haspPermission(target:Permission,p:Permission) {
+    return (target & p) === target;
+    // 0010 === 0010
+}
+// console.log(haspPermission(Permission.Wirte,p));
+
+// 3. 如何删除权限
+//使用 异或运算^ 两个位置相同取0 不同曲1
+// 0010
+// 0010
+// 0001
+ p = p ^ Permission.Wirte;
+ console.log(haspPermission(Permission.Wirte,p));
+```
