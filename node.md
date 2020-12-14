@@ -299,3 +299,39 @@ function haspPermission(target:Permission,p:Permission) {
  p = p ^ Permission.Wirte;
  console.log(haspPermission(Permission.Wirte,p));
 ```
+
+# ts总的模块化
+ - Ts中，导入导出模块，统一使用ES6的模块化标准
+  - 在导出时使用声明导出，可以有提示shuom
+  - 不要在路劲后面加上后缀名会报错
+  ```js
+  export let name = 'szc';
+  import {name} from './xxx'
+  ```
+# 模块化的一些配置
+------------------------------------------------------
+|模块名称              | 含义                         |
+|----------------------------------------------------|
+|module                |设置编译结果使用的模块标准      |
+|moduleResolution      |设置解析模块的模式             |
+|noImplicitUseStrict   |编译结果中不包含"use strict"   |
+|removeComments        |编译结果去除注释               |
+|noEmitOnError         |错误时不生成编译结果            |
+|esModuleInterop       |启用es模块化交换非es模块导出    |
+-------------------------------------------------------
+
+# 编译结果中的模块化
+ - 可配置 module配置
+ - 如果是编译结果的模块化标准是ES6：没有区别
+ - 如果编译结果的模块化标准是commonjs：导出的声明会变成exports的属性
+    默认的导出会变成exports的default属性
+# 如果在TS中书写commonjs模块化代码
+ - 导出：export：xxx
+ - 导入：import xxx = require('xxxx')
+
+# 模块解析
+ - 模块解析：应该从什么位置寻找模块
+ - TS中，有两种模块解析策略
+  - classic:经典
+  - node: node解析策略（唯一的变化，是将js替换为ts）
+   
