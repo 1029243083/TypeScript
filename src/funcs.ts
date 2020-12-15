@@ -1,5 +1,5 @@
 import { Mark, Color } from "./enums";
-import { Desk } from "./types";
+import { Card, Desk, King } from "./types";
 
 export function createDesk(): Desk {
     let poker: Desk = [];
@@ -9,17 +9,34 @@ export function createDesk(): Desk {
         for (const c of colors) {
             poker.push({
                 color:c,
-                mark:m
-            })
+                mark:m,
+                getString(){
+                    return this.color + this.mark
+                }
+            } as Card)
         }
     }
+    let king:King = {
+        type:'big',
+        getString(){
+            return "JO"
+        }
+    }   
+    poker.push(king);
+    king = {
+        type:'samll',
+        getString(){
+            return "jo"
+        }
+    }
+    poker.push(king)
     return poker;
 }
 
 export function printDesk(poker: Desk) {
     let str: string = ''
     poker.forEach((item, i) => {
-        str += item.mark + item.color;
+        str += item.getString();
         str += '\t'
         if ((i + 1) % 6 === 0) {
             str += '\n'

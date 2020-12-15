@@ -334,4 +334,124 @@ function haspPermission(target:Permission,p:Permission) {
  - TS中，有两种模块解析策略
   - classic:经典
   - node: node解析策略（唯一的变化，是将js替换为ts）
-   
+
+# 接口和类型兼容
+ - 接口：inteface
+ > 扩展类型：类型别名，枚举，接口，类
+ - typescript接口：用于约束类，对象，函数的契约(标准)
+ - 契约(标准) 的形式：
+    1. api文档，弱标准
+    2. 代码约束，强标准
+
+ 1. 如何约束对象
+    ```js
+    interface 名字{
+        字段名：类型
+    }
+    interface User{ //根类型别名差不多，接口主要在类的约束
+        name:string,
+        age:number
+    }
+    ```
+ 2. 如何约束函数
+    ```js
+    interface User{ //约束对象中的函数
+        name:string,
+        sayHello:()=>viod,
+        sayHello():viod
+    }
+
+    interface User{ //约束单个函数
+        (n:number): boolean
+    }
+
+    function sun(numbers:number[],callback:User){ //约束callback函数，参数为数字类型，返回值为布尔类型
+
+    }
+    sun([1,2,3,4],(n) => n%2 == 1)
+    ```
+ 3. 接口的继承
+    ```js
+    interface T1{
+        A:string
+    }
+    interface T2 extends T1{
+        b:number
+    }
+    let C:T2 = { //必须有a,b属性
+        a:'szc',
+        b:11
+    }
+
+    继承多个
+    interface T3 extends T1,T2{
+        c:number
+    }
+    ```
+    类型别名也能属性继承的效果
+    ```js
+    type T1 = {
+        a:string
+    }
+    type T2 = {
+        b:number
+    }
+    type Ts = {
+        c:boolean
+    } & T1 & T2
+    ```
+     - 需要通过```&```,他叫做交叉类型
+ - 他们的区别
+    - 子接口不能覆盖接口的成员 "接口"
+    - 交叉类型会把相同的成员的类型进行交叉 
+
+ - **readonly**
+    只读修饰符，修饰的目标是只读
+    只读修饰符不在编译结果中
+    ```js
+    //修饰某个属性
+    interface User{
+        readonly id:string,  //加上修饰符，这个属性不能变化，只能读取
+        age:number,
+    }
+    //修饰一个数组
+    let arr : readonly number[] = [1,23,4,5]; //约束的是这个数字不是这个变量，变量从const就不保证不被改变，这个用修饰符修饰的数组，不能使用数组的方法，不能改变数组里的值
+
+    //修饰对象里的数组
+    interface User {
+       readonly arr: readonly number[]//两个修饰符 表示这个数组不能被更改，这个数组里面页不能被更改
+    }
+    ```
+
+# 类型兼容性
+B -> A ,如果能完成赋值，则A和B类型兼容
+鸭子辩型法(子结构辩型法)
+ - 对象类型：鸭子辩型法
+```js
+interface Duck{
+    sound:"嘎嘎嘎"
+    swin(): viod
+}
+let person = {
+    name?:'sss', //可选属性
+    sound: '嘎嘎嘎' as '嘎嘎嘎', //类型断言
+    swin(){
+        consloe.log('ss')
+    }
+}
+
+let u:Duck = person; //只要有sound 和 wsin方法就行
+
+//直接赋值字面量对象，只能写规定好的属性，你已经定义他是一只鸭子，就不能有其他的属性，但用上面的方式赋值可以，因为这个对象，可能来自其他地方，ts也无法保证对象里的属性
+let u:Duck = {
+    name:'sss', //这里是报错的
+    sound:'嘎嘎嘎',
+    swin(){
+        console.log('ss')
+    }
+}
+```
+ - 函数类型
+  一切无比自然
+  **参数** 传递给目标函数的参数可以少，但不可以多
+  **返回值** 要求返回必须返回，不要求返回，你随意
