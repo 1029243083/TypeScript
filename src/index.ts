@@ -1,2 +1,7 @@
-import { printDesk, createDesk } from "./funcs";
-printDesk(createDesk());
+import {Desk} from './DeskClass'
+const d = new Desk();
+console.log(d.print());
+d.shuffle();
+const res = d.pubilsh();
+console.log(res)
+ 

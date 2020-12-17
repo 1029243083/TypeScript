@@ -455,3 +455,101 @@ let u:Duck = {
   一切无比自然
   **参数** 传递给目标函数的参数可以少，但不可以多
   **返回值** 要求返回必须返回，不要求返回，你随意
+
+# TS中的类
+**属性**
+使用属性列表来描述类中的属性
+```js
+Class User {
+    name:string, //属性列表
+    age:number,
+    gender:"男" | "女" = '男' //默认属性
+    constructor(name:string,age:number){
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+属性的初始化检查使用配置 ```strictPropertyInitialization:true```
+属性初始化的位置
+ - 构造函数中
+ - 属性的默认值
+
+**可选属性**
+```js
+Class User {
+    name:string //属性列表
+    age:number
+    gender:"男" | "女" = '男' //默认属性
+    pid?:string //可选属性 就是string类型和undefined类型  这个不在属性初始化中
+    constructor(name:string,age:number){
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+**不可变的属性**
+```js
+Class User {
+    readonly id:number //只读的属性
+    name:string //属性列表
+    age:number
+    gender:"男" | "女" = '男' //默认属性
+    pid?:string //可选属性 就是string类型和undefined类型  这个不在属性初始化中
+    constructor(name:string,age:number){
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+**私有化的属性**
+public： 公共的属性，里外都能访问修改 默认的属性就是这个
+private：私有的，只能在类中使用，这个修饰符还可以添加给方法，让方法私有
+```js
+Class User {
+    readonly id:number //只读的属性
+    name:string //属性列表
+    age:number
+    gender:"男" | "女" = '男' //默认属性
+    pid?:string //可选属性 就是string类型和undefined类型  这个不在属性初始化中
+    private nowIndex:number = 1 //表示私有的属性这能在这个类中使用
+    constructor(name:string,age:number){
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+**属性简写**
+如果某个属性，通过构造函数的参数传递，并且不对这个属性进行处理并直接赋值，就可以用简写
+```js
+Class User {
+    readonly id:number //只读的属性
+    name:string //属性列表
+    gender:"男" | "女" = '男' //默认属性
+    pid?:string //可选属性 就是string类型和undefined类型  这个不在属性初始化中
+    private nowIndex:number = 1 //表示私有的属性这能在这个类中使用
+    constructor(name:string, public age:number){ //在参数前面加上public
+        this.name = name;
+    }
+}
+```
+**ts的访问器**
+作用：用于控制属性的读取和设置
+```js
+Class User {
+    readonly id:number //只读的属性
+    name:string //属性列表
+    gender:"男" | "女" = '男' //默认属性
+    pid?:string //可选属性 就是string类型和undefined类型  这个不在属性初始化中
+    private nowIndex:number = 1 //表示私有的属性这能在这个类中使用
+    constructor(name:string, public age:number){ //在参数前面加上public
+        this.name = name;
+    },
+    set age(){
+        //经过函数处理
+    },
+    get age(){
+        //经过函数处理
+    }
+}
+```
