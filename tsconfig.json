@@ -1,6 +1,6 @@
 {
     "compilerOptions": { //编译选项
-        "target": "es3", //配置ts编译的结果是es的哪个版本
+        "target": "es2016", //配置ts编译的结果是es的哪个版本
         "module": "commonjs", //配置目标使用的模块化标准
         "lib": [
             "es2016"

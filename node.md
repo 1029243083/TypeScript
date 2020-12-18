@@ -553,3 +553,46 @@ Class User {
     }
 }
 ```
+# 泛型
+ - 有时，书写某个函数时，会丢失一些信息（多个位置的类型应该保持一致或有关联的信息）
+ - 泛型：是指附属于函数，类，接口，类型别名之上的类型
+ - 泛型相当于一类型变量，在定义时，无法预先知道具体的类型，可以用该变量来代替，只有在调用时才能确定他的类型
+ - 如果无法完成推导，并且又没有传递具体的类型，默认为空对象
+ - 泛型可以使用默认值
+
+# 在函数中使用泛型
+在函数名之后写上```<泛型名称>```
+```js
+//T代表泛型
+function test<T>(arr:T[],n:number) {
+    let newArr:T[] = [];
+    if(n >= arr.length){
+        return arr;
+    }else{
+        for(let i = 0; i < arr.length; i++){
+            newArr.push(arr[i]);
+        }
+    }
+}
+const res = test<number>([1,2,3,4,5],2);
+```
+# 如何在类型别名，接口，类中使用泛型
+直接在名称后写上```<泛型名称>```
+```js
+type callback<T> = (n:<T>,i:number) => boolean
+function filter<T>(arr:<T>,callback:callback<T>) {
+    arr.forEach((n,i) => {
+        callback(n,i);
+    })
+}
+```
+# 泛型约束
+泛型约束用于泛型的取值
+
+# 多泛型
+ - 依赖多个泛型
+```js
+function mixinArray<T,K>(arr1:T[],arr2:T[]):(T|K)[] {
+
+}
+```
