@@ -1,0 +1,20 @@
+.chess{
+    width: 50px;
+    height: 50px;
+    border: 2px solid linen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.chess-item{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.chess .red{
+    background-image: radial-gradient(#fff,#f40);
+}
+.chess .blak{
+    background-image: radial-gradient(#fff,#000);
+}
