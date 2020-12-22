@@ -1,45 +1,54 @@
-abstract class Chess {
-    x: number = 0
-    y: number = 0
-    abstract name: string;
-    move(targetX: number, targetY: number) { //流程完全一致
-        console.log('是否超出边界'),
-            console.log('目标位置是否有己方棋子')
-        if (this.rult(targetX, targetY)) { // 这个需要不同的棋子，有不同的规则，需要不同的棋子，自己实现 所以做成抽象方法
-            return true
+// class User {
+
+//     private static users: User[] = []
+
+//     constructor(
+//         public loginId: string,
+//         public loginPwd: string,
+//         public name: string,
+//         public age: number
+//     ) {
+//         User.users.push(this);
+//     }
+
+//     sayHello(): void {
+//         console.log(`我是${this.name}今年${this.age},我的账号${this.loginId}`);
+//     }
+
+//     static login(loginId: string, loginPwd: string): User | undefined {
+//         return this.users.find((user) => {
+//             return user.loginId === loginId && user.loginPwd === loginPwd
+//         })
+//     }
+
+// }
+
+// new User('aaa', '111', 'u1', 11);
+// new User('aaa', '111', 'u2', 11);
+// new User('aaa', '111', 'u3', 11);
+
+// const res = User.login('aaa', '111');
+// if (res) {
+//     console.log(res.sayHello())
+
+// } else {
+//     console.log('账号密码错误')
+// }
+
+class Board {
+    private constructor() { }
+    private static _board: Board
+
+    static createBoard() {
+        if (this._board) {
+            return this._board;
+        } else {
+            this._board = new Board();
+            return this._board;
         }
-    };
-    protected abstract rult(targetX: number, targetY: number): boolean;
-}
-
-class Hores extends Chess {
-    name: string
-    constructor() {
-        super();
-        this.name = '马'
-    }
-    protected rult() {
-        console.log('实现一些规则');
-        return true;
-    }
-
-}
-
-class Cannon extends Chess {
-    get name(): string {
-        return '兵'
-    }
-    protected rult() {
-        console.log('实现一些规则');
-        return true;
-    }
-
-}
-
-class Soldier extends Chess {
-    name: string = '炮';
-    protected rult() {
-        console.log('实现一些规则');
-        return true;
     }
 }
+
+const b = Board.createBoard();
+const b1 = Board.createBoard();
+console.log(b === b1)
